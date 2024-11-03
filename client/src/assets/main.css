@@ -1,0 +1,8 @@
+@import './base.css';
+
+
+@import '@fontsource-variable/dm-sans';
+
+body {
+  font-family: 'DM Sans Variable', sans-serif;
+}
