@@ -327,7 +327,7 @@ const onSubmit = async () => {
       </div>
     </main>
   </div>
-  <Toaster richColors />
+  <Toaster richColors position="top-right" />
 </template>
 
 <style>
