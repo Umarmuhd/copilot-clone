@@ -20,7 +20,7 @@ COPY . .
 COPY --from=install /temp/prod/server/node_modules node_modules
 COPY --from=install /temp/prod/client/node_modules client/node_modules
 ENV NODE_ENV=production
-RUN cd client && bun run build -d
+RUN cd client && bun run build
 
 FROM base as release
 COPY --from=install /temp/prod/server/node_modules node_modules
