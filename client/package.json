@@ -13,11 +13,14 @@
   "dependencies": {
     "@fontsource-variable/dm-sans": "^5.1.0",
     "@headlessui/vue": "^1.7.23",
-    "vue": "^3.5.12"
+    "@tanstack/vue-query": "^5.59.17",
+    "axios": "^1.7.7",
+    "vue": "^3.5.12",
+    "vue-sonner": "^1.2.5"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",
-    "@types/node": "^20.17.0",
+    "@types/node": "^20.17.5",
     "@vitejs/plugin-vue": "^5.1.4",
     "@vue/tsconfig": "^0.5.1",
     "autoprefixer": "^10.4.20",

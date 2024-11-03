@@ -8,6 +8,6 @@ const PostgresEnv = z.object({
 });
 const ProcessEnv = PostgresEnv.parse(process.env);
 
-// // For query purposes
-// const queryClient = postgres(ProcessEnv.DATABASE_URL);
-// export const db = drizzle(queryClient);
+// For query purposes
+const queryClient = postgres(ProcessEnv.DATABASE_URL);
+export const db = drizzle(queryClient);

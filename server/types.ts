@@ -1,5 +1,6 @@
-import { insertChatsSchema } from "./db/schema";
 import { z } from "zod";
+
+import { insertChatsSchema } from "./db/schemas/chats";
 
 export type SuccessResponse<T = void> = {
   success: true;

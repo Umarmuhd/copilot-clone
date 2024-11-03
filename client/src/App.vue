@@ -1,5 +1,45 @@
 <script setup lang="ts">
+import { reactive } from "vue";
 import UserMenu from "./components/user-menu.vue";
+import { Toaster, toast } from 'vue-sonner'
+import { useQueryClient, useQuery, useMutation } from '@tanstack/vue-query'
+import client from "./data/client/index";
+import { API_ENDPOINTS } from "./data/client/endpoints";
+
+
+// Access QueryClient instance
+const queryClient = useQueryClient()
+
+const form = reactive({
+  content: '',
+});
+
+// Mutation
+const mutation = useMutation({
+  mutationFn: client.chats.create,
+  onSuccess: () => {
+    // Invalidate and refetch
+    queryClient.invalidateQueries({ queryKey: [API_ENDPOINTS.CHATS] })
+  },
+})
+
+
+const onSubmit = async () => {
+  console.log('form', form.content);
+
+  toast.promise(mutation.mutateAsync({ content: form.content, userId: "lore" }, {
+    onSuccess: () => {
+      toast.success("Message sent successfully");
+      form.content = '';
+    },
+    onError: () => {
+      toast.error('Error occurred!');
+    },
+  }), {
+    loading: 'Loading...',
+  });
+};
+
 </script>
 
 <!-- App.vue -->
@@ -53,7 +93,7 @@ import UserMenu from "./components/user-menu.vue";
                 </button>
                 <!-- Additional cards would follow the same pattern -->
                 <button
-                  class="relative size-full max-h-128 rounded-7xl pb-0.5 text-foreground-800 transition-transform duration-200 ease-in hover:scale-[1.025] before:absolute before:inset-x-px before:-top-0 before:bottom-0.5 focus:outline-none focus:before:ring-stroke-800 focus-visible:before:ring-2 contrast-more:border-2 contrast-more:focus:border-0 col-span-2 t-discover-card-small row-span-1 before:rounded-7xl aspect-[2/1] h-40 sm:h-auto">
+                  class="relative size-full max-h-128 rounded-7xl pb-0.5 text-foreground-800 transition-transform duration-200 ease-in hover:scale-[1.025] before:absolute before:inset-x-px before:-top-0 before:bottom-0.5 focus:outline-none focus:before:ring-stroke-800 focus-visible:before:ring-2 contrast-more:border-2 contrast-more:focus:border-0 col-span-2 t-discover-card-small row-span-1 before:rounded-7xl aspect-[2/1] h-40 sm:h-auto bg-white">
                   <div class="flex h-full gap-4 p-3 text-start text-md">
                     <img
                       class="t-discover-card-image aspect-square min-h-0 bg-black/5 object-cover dark:bg-black/20 shrink-0 rounded-5xl md:rounded-6xl"
@@ -67,7 +107,7 @@ import UserMenu from "./components/user-menu.vue";
                   </div>
                 </button>
                 <button
-                  class="relative size-full max-h-128 rounded-7xl pb-0.5 text-foreground-800 transition-transform duration-200 ease-in hover:scale-[1.025] before:absolute before:inset-x-px before:-top-0 before:bottom-0.5 focus:outline-none focus:before:ring-stroke-800 focus-visible:before:ring-2 contrast-more:border-2 contrast-more:focus:border-0 col-span-2 t-discover-card-small row-span-1 before:rounded-7xl aspect-[2/1] h-40 sm:h-auto">
+                  class="relative size-full max-h-128 rounded-7xl pb-0.5 text-foreground-800 transition-transform duration-200 ease-in hover:scale-[1.025] before:absolute before:inset-x-px before:-top-0 before:bottom-0.5 focus:outline-none focus:before:ring-stroke-800 focus-visible:before:ring-2 contrast-more:border-2 contrast-more:focus:border-0 col-span-2 t-discover-card-small row-span-1 before:rounded-7xl aspect-[2/1] h-40 sm:h-auto bg-white">
                   <div class="flex h-full gap-4 p-3 text-start text-md">
                     <img
                       class="t-discover-card-image aspect-square min-h-0 bg-black/5 object-cover dark:bg-black/20 shrink-0 rounded-5xl md:rounded-6xl"
@@ -90,7 +130,7 @@ import UserMenu from "./components/user-menu.vue";
               <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
                 <!-- Cards will go here -->
                 <button type="button" data-testid="discover-card"
-                  class="relative size-full max-h-128 rounded-7xl pb-0.5 text-foreground-800 transition-transform duration-200 ease-in hover:scale-[1.025] before:absolute before:inset-x-px before:-top-0 before:bottom-0.5 focus:outline-none focus:before:ring-stroke-800 focus-visible:before:ring-2 contrast-more:border-2 contrast-more:focus:border-0 col-span-2 t-discover-card-large row-span-2 aspect-square before:rounded-8xl">
+                  class="relative size-full max-h-128 rounded-7xl pb-0.5 text-foreground-800 transition-transform duration-200 ease-in hover:scale-[1.025] before:absolute before:inset-x-px before:-top-0 before:bottom-0.5 focus:outline-none focus:before:ring-stroke-800 focus-visible:before:ring-2 contrast-more:border-2 contrast-more:focus:border-0 col-span-2 t-discover-card-large row-span-2 aspect-square before:rounded-8xl bg-white">
                   <div class="flex h-full gap-4 p-3 text-start flex-col text-lg sm:text-md md:text-lg">
                     <img
                       class="t-discover-card-image aspect-square min-h-0 bg-black/5 object-cover dark:bg-black/20 rounded-b-5xl rounded-t-7xl"
@@ -105,7 +145,7 @@ import UserMenu from "./components/user-menu.vue";
                 </button>
                 <!-- Additional cards would follow the same pattern -->
                 <button
-                  class="relative size-full max-h-128 rounded-7xl pb-0.5 text-foreground-800 transition-transform duration-200 ease-in hover:scale-[1.025] before:absolute before:inset-x-px before:-top-0 before:bottom-0.5 focus:outline-none focus:before:ring-stroke-800 focus-visible:before:ring-2 contrast-more:border-2 contrast-more:focus:border-0 col-span-2 t-discover-card-small row-span-1 before:rounded-7xl aspect-[2/1] h-40 sm:h-auto">
+                  class="relative size-full max-h-128 rounded-7xl pb-0.5 text-foreground-800 transition-transform duration-200 ease-in hover:scale-[1.025] before:absolute before:inset-x-px before:-top-0 before:bottom-0.5 focus:outline-none focus:before:ring-stroke-800 focus-visible:before:ring-2 contrast-more:border-2 contrast-more:focus:border-0 col-span-2 t-discover-card-small row-span-1 before:rounded-7xl aspect-[2/1] h-40 sm:h-auto bg-white">
                   <div class="flex h-full gap-4 p-3 text-start text-md">
                     <img
                       class="t-discover-card-image aspect-square min-h-0 bg-black/5 object-cover dark:bg-black/20 shrink-0 rounded-5xl md:rounded-6xl"
@@ -119,7 +159,7 @@ import UserMenu from "./components/user-menu.vue";
                   </div>
                 </button>
                 <button
-                  class="relative size-full max-h-128 rounded-7xl pb-0.5 text-foreground-800 transition-transform duration-200 ease-in hover:scale-[1.025] before:absolute before:inset-x-px before:-top-0 before:bottom-0.5 focus:outline-none focus:before:ring-stroke-800 focus-visible:before:ring-2 contrast-more:border-2 contrast-more:focus:border-0 col-span-2 t-discover-card-small row-span-1 before:rounded-7xl aspect-[2/1] h-40 sm:h-auto">
+                  class="relative size-full max-h-128 rounded-7xl pb-0.5 text-foreground-800 transition-transform duration-200 ease-in hover:scale-[1.025] before:absolute before:inset-x-px before:-top-0 before:bottom-0.5 focus:outline-none focus:before:ring-stroke-800 focus-visible:before:ring-2 contrast-more:border-2 contrast-more:focus:border-0 col-span-2 t-discover-card-small row-span-1 before:rounded-7xl aspect-[2/1] h-40 sm:h-auto bg-white">
                   <div class="flex h-full gap-4 p-3 text-start text-md">
                     <img
                       class="t-discover-card-image aspect-square min-h-0 bg-black/5 object-cover dark:bg-black/20 shrink-0 rounded-5xl md:rounded-6xl"
@@ -142,7 +182,7 @@ import UserMenu from "./components/user-menu.vue";
               <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
                 <!-- Cards will go here -->
                 <button type="button" data-testid="discover-card"
-                  class="relative size-full max-h-128 rounded-7xl pb-0.5 text-foreground-800 transition-transform duration-200 ease-in hover:scale-[1.025] before:absolute before:inset-x-px before:-top-0 before:bottom-0.5 focus:outline-none focus:before:ring-stroke-800 focus-visible:before:ring-2 contrast-more:border-2 contrast-more:focus:border-0 col-span-2 t-discover-card-large row-span-2 aspect-square before:rounded-8xl">
+                  class="relative size-full max-h-128 rounded-7xl pb-0.5 text-foreground-800 transition-transform duration-200 ease-in hover:scale-[1.025] before:absolute before:inset-x-px before:-top-0 before:bottom-0.5 focus:outline-none focus:before:ring-stroke-800 focus-visible:before:ring-2 contrast-more:border-2 contrast-more:focus:border-0 col-span-2 t-discover-card-large row-span-2 aspect-square before:rounded-8xl bg-white">
                   <div class="flex h-full gap-4 p-3 text-start flex-col text-lg sm:text-md md:text-lg">
                     <img
                       class="t-discover-card-image aspect-square min-h-0 bg-black/5 object-cover dark:bg-black/20 rounded-b-5xl rounded-t-7xl"
@@ -157,7 +197,7 @@ import UserMenu from "./components/user-menu.vue";
                 </button>
                 <!-- Additional cards would follow the same pattern -->
                 <button
-                  class="relative size-full max-h-128 rounded-7xl pb-0.5 text-foreground-800 transition-transform duration-200 ease-in hover:scale-[1.025] before:absolute before:inset-x-px before:-top-0 before:bottom-0.5 focus:outline-none focus:before:ring-stroke-800 focus-visible:before:ring-2 contrast-more:border-2 contrast-more:focus:border-0 col-span-2 t-discover-card-small row-span-1 before:rounded-7xl aspect-[2/1] h-40 sm:h-auto">
+                  class="relative size-full max-h-128 rounded-7xl pb-0.5 text-foreground-800 transition-transform duration-200 ease-in hover:scale-[1.025] before:absolute before:inset-x-px before:-top-0 before:bottom-0.5 focus:outline-none focus:before:ring-stroke-800 focus-visible:before:ring-2 contrast-more:border-2 contrast-more:focus:border-0 col-span-2 t-discover-card-small row-span-1 before:rounded-7xl aspect-[2/1] h-40 sm:h-auto bg-white">
                   <div class="flex h-full gap-4 p-3 text-start text-md">
                     <img
                       class="t-discover-card-image aspect-square min-h-0 bg-black/5 object-cover dark:bg-black/20 shrink-0 rounded-5xl md:rounded-6xl"
@@ -172,7 +212,7 @@ import UserMenu from "./components/user-menu.vue";
                   </div>
                 </button>
                 <button
-                  class="relative size-full max-h-128 rounded-7xl pb-0.5 text-foreground-800 transition-transform duration-200 ease-in hover:scale-[1.025] before:absolute before:inset-x-px before:-top-0 before:bottom-0.5 focus:outline-none focus:before:ring-stroke-800 focus-visible:before:ring-2 contrast-more:border-2 contrast-more:focus:border-0 col-span-2 t-discover-card-small row-span-1 before:rounded-7xl aspect-[2/1] h-40 sm:h-auto">
+                  class="relative size-full max-h-128 rounded-7xl pb-0.5 text-foreground-800 transition-transform duration-200 ease-in hover:scale-[1.025] before:absolute before:inset-x-px before:-top-0 before:bottom-0.5 focus:outline-none focus:before:ring-stroke-800 focus-visible:before:ring-2 contrast-more:border-2 contrast-more:focus:border-0 col-span-2 t-discover-card-small row-span-1 before:rounded-7xl aspect-[2/1] h-40 sm:h-auto bg-white">
                   <div class="flex h-full gap-4 p-3 text-start text-md">
                     <img
                       class="t-discover-card-image aspect-square min-h-0 bg-black/5 object-cover dark:bg-black/20 shrink-0 rounded-5xl md:rounded-6xl"
@@ -198,13 +238,14 @@ import UserMenu from "./components/user-menu.vue";
       </div>
 
       <!-- Composer Section -->
-      <div data-testid="composer" class="pointer-events-none absolute bottom-0 flex w-full z-10">
+      <div class="pointer-events-none absolute bottom-0 flex w-full z-10">
 
         <!-- Bottom Fade -->
-        <div class="t-bottom-fade absolute bottom-0 mx-4 box-content w-bottom-fade pt-bottom-fade h-composer">
+        <div class="t-bottom-fade absolute bottom-0 mx-4 box-content w-[calc(100% - 2rem)] pt-24 h-16">
           <div class="fixed inset-0">
-            <div class="absolute size-full bg-gradient-chat-light dark:bg-midnight-850 dark:bg-none"></div>
-            <div class="absolute size-full bg-gradient-discover-light dark:bg-gradient-discover-dark"></div>
+            <div class="absolute bg-gradient-chat-light size-full">
+            </div>
+            <div class="absolute size-full bg-gradient-discover-light"></div>
           </div>
         </div>
 
@@ -240,7 +281,7 @@ import UserMenu from "./components/user-menu.vue";
                   </div>
 
                   <!-- Text Input -->
-                  <div
+                  <form @submit.prevent="onSubmit"
                     class="relative flex grow flex-col overflow-hidden bg-white/90 shadow-composer-input mx-2 rounded-3xl">
                     <div class="flex grow items-end w-auto grow">
                       <div class="relative grow overflow-hidden">
@@ -248,46 +289,20 @@ import UserMenu from "./components/user-menu.vue";
                           <div class="flex grow flex-col gap-4 py-user-input">
                             <div class="max-h-dvh-0.5 overflow-y-auto px-4">
                               <div>
-                                <label class="invisible block h-0 whitespace-nowrap" for="userInput">Message
+                                <label class="sr-only" for="userInput">Message
                                   Copilot</label>
-                                <textarea
-                                  class="block min-h-user-input w-full resize-none overflow-y-hidden whitespace-pre-wrap bg-transparent text-black outline-none placeholder:text-stone-550/90 dark:text-white dark:placeholder:text-slate-400 text-base"
-                                  placeholder="Message Copilot" id="userInput" role="textbox" spellcheck="false"
-                                  enterkeyhint="enter"></textarea>
+                                <input
+                                  class="block min-h-user-input w-full resize-none overflow-y-hidden whitespace-pre-wrap bg-transparent text-black outline-none placeholder:text-neutral-500/90 text-base h-6"
+                                  placeholder="Message Copilot" id="userInput" type="text" v-model="form.content">
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-
-                  <!-- <div
-                    class="relative flex grow flex-col overflow-hidden bg-white/90 shadow-composer-input before:absolute before:inset-0 before:rounded-3xl before:border-2 before:border-stroke-350 dark:bg-midnight-900/80 dark:shadow-none w-auto contrast-more:border-2 mx-2 before:opacity-0"
-                    aria-hidden="false" style="border-radius: 20px; transform: none; transform-origin: 50% 50% 0px;">
-                    <div class="w-full h-0" style="transform: none; transform-origin: 50% 50% 0px;"></div>
-                    <div class="flex grow items-end w-auto grow" style="transform: none; transform-origin: 50% 50% 0px;">
-                      <div class="relative grow overflow-hidden" style="transform: none; transform-origin: 50% 50% 0px;">
-                        <div class="relative flex size-full cursor-text overflow-hidden text-black dark:text-white"
-                          style="transform: none; transform-origin: 50% 50% 0px;">
-                          <div class="flex grow flex-col gap-4 py-user-input"
-                            style="transform: none; transform-origin: 50% 50% 0px;">
-                            <div class="max-h-dvh-0.5 overflow-y-auto px-4">
-                              <div><label class="invisible block h-0 whitespace-nowrap" for="userInput">Message
-                                  Copilot</label><textarea
-                                  class="block min-h-user-input w-full resize-none overflow-y-hidden whitespace-pre-wrap bg-transparent text-black outline-none placeholder:text-stone-550/90 dark:text-white dark:placeholder:text-slate-400 text-base"
-                                  placeholder="Message Copilot" id="userInput" role="textbox" spellcheck="false"
-                                  enterkeyhint="enter" style="height: 26px !important;"></textarea></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="relative bottom-0 my-1.5 flex h-9 items-center w-0"></div>
-                    </div>
-                  </div> -->
+                  </form>
 
                   <!-- Voice Input Button -->
-
                   <div class="relative my-1 shrink-0 size-10" style="transform: none; transform-origin: 50% 50% 0px;">
                     <button type="button"
                       class="absolute flex size-10 items-center justify-center rounded-xl fill-foreground-750 p-2 text-foreground-800 fill-foreground-800 active:text-foreground-600 active:fill-foreground-600 dark:active:text-foreground-650 dark:active:fill-foreground-650 bg-transparent hover:bg-black/5 active:bg-black/3 dark:hover:bg-black/30 dark:active:bg-black/20 start-0"
@@ -312,6 +327,7 @@ import UserMenu from "./components/user-menu.vue";
       </div>
     </main>
   </div>
+  <Toaster richColors />
 </template>
 
 <style>
@@ -370,5 +386,47 @@ import UserMenu from "./components/user-menu.vue";
 .size-6 {
   width: 1.5rem;
   height: 1.5rem;
+}
+
+.pt-bottom-fade {
+  padding-top: 6rem;
+}
+
+.w-bottom-fade {
+  width: calc(100% - 2rem);
+}
+
+.t-bottom-fade {
+  -webkit-mask-image: linear-gradient(transparent 0px, black 6rem);
+  mask-image: linear-gradient(transparent 0px, #000 6rem);
+}
+
+.bg-gradient-chat-light {
+  background-image: linear-gradient(180deg, #f8f4f2 50%, #fdedde);
+}
+
+.bg-gradient-discover-light {
+  background-image: linear-gradient(180deg, #f8f4f2, #fdedde);
+}
+
+.max-w-chat {
+  max-width: min(100%, 46.5rem);
+}
+
+.min-h-composer {
+  min-height: 4rem;
+}
+
+.py-user-input {
+  padding-top: .6875rem;
+  padding-bottom: .6875rem;
+}
+
+.min-h-user-input {
+  min-height: 1.625rem;
+}
+
+.max-h-dvh-0\.5 {
+  max-height: 50dvh;
 }
 </style>
