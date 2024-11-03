@@ -15,7 +15,7 @@ app.use("*", cors(), async (c, next) => {
   return next();
 });
 
-app.get("/", (c) => {
+app.get("/hello", (c) => {
   return c.text("Hello Hono!");
 });
 
