@@ -20,7 +20,7 @@ COPY . .
 COPY --from=install /temp/prod/server/node_modules node_modules
 COPY --from=install /temp/prod/client/node_modules client/node_modules
 ENV NODE_ENV=production
-ENV VITE_API_URL=copilot-clone.railway.internal/api
+ENV VITE_API_URL=https://copilot-clone.railway.internal/api
 RUN cd client && bun run build
 
 FROM base as release
